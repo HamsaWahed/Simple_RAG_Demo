@@ -81,7 +81,7 @@ The **indexing phase** is the first step in RAG. Here's what it does:
 | Italy and France produce over 40% of world’s wine.  | [0.1, 0.04, -0.34, 0.21, ...] |
 | Taj Mahal in India is made entirely of marble.      | [-0.12, 0.03, 0.9, -0.1, ...] |
 | 90% of the world’s fresh water is in Antarctica.    | [-0.02, 0.6, -0.54, 0.03, ...] |
-
+```
 
 These vectors allow semantic search, where instead of exact keyword matching, we retrieve based on vector similarity.
 
@@ -110,21 +110,21 @@ In the retrieval phase:
 ## 🧠 Next Steps
 After building the basic system, you can experiment with:
 
-* Adding real vector databases like Qdrant or Pinecone.
+* Adding real vector databases like **Qdrant** or **Pinecone**.
 
-* Using Hybrid RAG by combining keyword search + semantic search.
+* Using **Hybrid RAG** by combining keyword search + semantic search.
 
-* Implementing Hierarchical RAG for more structured documents.
+* Implementing **Hierarchical RAG** for more structured documents.
 
-* Expanding to multilingual RAG with appropriate models
+* Expanding to **multilingual RAG** with appropriate models
 
 ## 🚀 Summary
 This guide demonstrated how to build a simple RAG system using:
 
-Embeddings for semantic understanding
+* Embeddings for semantic understanding
 
-In-memory vector database
+* In-memory vector database
 
-A language model to generate rich responses
+* A language model to generate rich responses
 
-With just a few components, you can create a system that makes your LLMs more accurate, reliable, and context-aware. 🔍🤖
+* With just a few components, you can create a system that makes your LLMs more accurate, reliable, and context-aware. 🔍🤖
