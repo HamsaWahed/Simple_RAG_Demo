@@ -1,43 +1,130 @@
-# Code a simple RAG from scratch
+# 🧠 Build a Simple RAG (Retrieval-Augmented Generation) from Scratch
+**Retrieval-Augmented Generation (RAG)** is a powerful technique in modern AI that combines the strengths of information retrieval with the generative capabilities of large language models (LLMs). This fusion enables LLMs to generate more accurate and context-aware responses by grounding outputs in external knowledge sources.
 
-Recently, Retrieval-Augmented Generation (RAG) has emerged as a powerful paradigm in the field of AI and Large Language Models (LLMs). RAG combines information retrieval with text generation to enhance language models' performance by incorporating external knowledge sources. This approach has shown promising results in various applications, such as question answering, dialogue systems, and content generation.
+RAG has shown significant success across a variety of applications including:
 
-In this blog post, we'll explore RAG and build a simple RAG system from scratch using Python and ollama. This project will help you understand the key components of RAG systems and how they can be implemented using fundamental programming concepts.
+** 🧾 Question answering
 
-A RAG system consists of two key components:
+** 💬 Dialogue systems
 
-A retrieval model that fetches relevant information from an external knowledge source, which could be a database, search engine, or any other information repository.
-A language model that generates responses based on the retrieved knowledge.
-There are several ways to implement RAG, including Graph RAG, Hybrid RAG, and Hierarchical RAG, which we'll discuss at the end of this post.
+** 📝 Content generation
 
-Simple RAG
-Let's create a simple RAG system that retrieves information from a predefined dataset and generates responses based on the retrieved knowledge. The system will comprise the following components:
-1- Embedding model: A pre-trained language model that converts input text into embeddings - vector representations that capture semantic meaning. These vectors will be used to search for relevant information in the dataset.
-2- Vector database: A storage system for knowledge and its corresponding embedding vectors. While there are many vector database technologies like Qdrant, Pinecone, and pgvector, we'll implement a simple in-memory database from scratch.
-3- Chatbot: A language model that generates responses based on retrieved knowledge. This can be any language model, such as Llama, Gemma, or GPT.
+In this guide, you'll learn how to build a **simple RAG system** from scratch using Python and **Ollama**. This hands-on approach will help you understand the key components of a RAG system and how to implement them step by step.
 
-## Indexing phase
-The indexing phase is the first step in creating a RAG system. 
-It involves breaking the dataset (or documents) into small chunks and calculating a vector representation for each chunk that can be efficiently searched during generation.
+---
 
-The size of each chunk can vary depending on the dataset and the application. For example, in a document retrieval system, each chunk can be a paragraph or a sentence. In a dialogue system, each chunk can be a conversation turn.
+## 📑 Table of Contents
 
-After the indexing phrase, each chunk with its corresponding embedding vector will be stored in the vector database. Here is an example of how the vector database might look like after indexing:
+- [What is RAG?](#what-is-rag)
+- [System Components](#system-components)
+- [Indexing Phase](#indexing-phase)
+- [Retrieval Phase](#retrieval-phase)
+- [Summary](#summary)
 
-   Chunk	                                                             Embedding Vector
-Italy and France produce over 40% of all wine in the world.	\[0.1, 0.04, -0.34, 0.21, ...\]
-The Taj Mahal in India is made entirely out of marble.	\[-0.12, 0.03, 0.9, -0.1, ...\]
-90% of the world's fresh water is in Antarctica.	\[-0.02, 0.6, -0.54, 0.03, ...\]
+---
 
-The embedding vectors can be later used to retrieve relevant information based on a given query. Think of it as SQL WHERE clause, but instead of querying by exact text matching, we can now query a set of chunks based on their vector representations.
+## 🤔 What is RAG?
 
-To compare the similarity between two vectors, we can use cosine similarity, Euclidean distance, or other distance metrics. In this example, we will use cosine similarity. Here is the formula for cosine similarity between two vectors A and B:
+<details>
+<summary>Click to expand</summary>
 
-![image](https://github.com/user-attachments/assets/da864ce7-5d5d-4263-8d61-9ff7d3289c99)
+**Retrieval-Augmented Generation (RAG)** combines:
 
-## Retrieval phrase
-In the diagram below, we will take an example of a given Input Query from User. We then calculate the Query Vector to represent the query, and compare it against the vectors in the database to find the most relevant chunks.
+- 🔍 A **retrieval model**: Fetches relevant information from external sources like databases or documents.
+- 🤖 A **language model**: Generates answers based on the retrieved data.
 
-The result returned by The Vector Database will contains top N most relevant chunks to the query. These chunks will be used by the Chatbot to generate a response.
+This method is widely used in:
+- ✅ Question answering
+- ✅ Dialogue systems
+- ✅ Content generation
+
+RAG variants include:
+- **Graph RAG**
+- **Hybrid RAG**
+- **Hierarchical RAG**
+
+</details>
+
+---
+
+## 🧱 System Components
+
+Our simple RAG system consists of three key components:
+
+- 🔧 **Embedding Model**  
+  Converts text into dense vectors (embeddings) that capture semantic meaning.
+
+- 💾 **Vector Database**  
+  Stores the embeddings along with the original knowledge chunks. We'll build a simple **in-memory** version (instead of using Qdrant, Pinecone, or pgvector).
+
+- 🤖 **Chatbot**  
+  A language model (like LLaMA, Gemma, or GPT) that generates responses using the retrieved chunks.
+
+---
+
+## 🧭 Step 1:🧊 Indexing Phase
+
+<details>
+<summary>Click to expand</summary>
+
+The **indexing phase** is the first step in RAG. Here's what it does:
+
+1. Breaks the dataset into small chunks (sentences, paragraphs, etc.)
+2. Generates a vector (embedding) for each chunk
+3. Stores the chunk and its embedding in the vector database
+
+🔍 **Example:**
+
+```text
+| Chunk                                               | Embedding Vector              |
+|-----------------------------------------------------|-------------------------------|
+| Italy and France produce over 40% of world’s wine.  | [0.1, 0.04, -0.34, 0.21, ...] |
+| Taj Mahal in India is made entirely of marble.      | [-0.12, 0.03, 0.9, -0.1, ...] |
+| 90% of the world’s fresh water is in Antarctica.    | [-0.02, 0.6, -0.54, 0.03, ...] |
 
 
+These vectors allow semantic search, where instead of exact keyword matching, we retrieve based on vector similarity.
+
+➕ **Vector Similarity** 
+To find relevant chunks, we calculate the cosine similarity between the query vector and stored vectors.
+
+**Cosine similarity formula:**
+**cosine_similarity = A • B / (||A|| * ||B||)**
+
+## 🔍 Step 2: Retrieval Phase
+In the retrieval phase:
+
+1 - A user **query** is provided.
+
+2- An **embedding** is generated for the query.
+
+3 - We compare this query vector with stored vectors using cosine similarity.
+
+4 - **The top N most relevant chunks** are selected as context.
+
+5 - These chunks are passed to the language model to generate the final **response**.
+
+### Retrival Workflow
+[User Query] ➡ [Query Embedding] ➡ [Compare to Vector DB] ➡ [Top N Chunks] ➡ [Chatbot Output]
+
+## 🧠 Next Steps
+After building the basic system, you can experiment with:
+
+* Adding real vector databases like Qdrant or Pinecone.
+
+* Using Hybrid RAG by combining keyword search + semantic search.
+
+* Implementing Hierarchical RAG for more structured documents.
+
+* Expanding to multilingual RAG with appropriate models
+
+## 🚀 Summary
+This guide demonstrated how to build a simple RAG system using:
+
+Embeddings for semantic understanding
+
+In-memory vector database
+
+A language model to generate rich responses
+
+With just a few components, you can create a system that makes your LLMs more accurate, reliable, and context-aware. 🔍🤖
